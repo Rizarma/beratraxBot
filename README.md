@@ -1,7 +1,7 @@
 # beratrax Bot Auto claim bera faucet and auto stake
 
 ![banner](image-1.png)
-- website : [https://beratrax.com/](https://testnet.beratrax.com/GeognosticalBera)
+- website : [https://beratrax.com/](https://testnet.beratrax.com/CrocoliteBera)
 ## Features
 
 - **Auto Claim Faucet Bera**
@@ -34,16 +34,20 @@
     ```sh
     npm install
     ```
-3. Create new wallets
+3. add 2captcha api key
+    ```
+    cp .env_example .env
+    ```
+4. Create new wallets
     ```
     npm run setup
     ```
-4. optionally you can use proxy: 
+5. optionally you can use proxy: 
 - paste proxy in `proxy.txt` format `http://username:password@ip:port` 
     ```sh
     nano proxy.txt
     ```
-5. Run the script:
+6. Run the script:
     ```sh
     npm run start
     ```

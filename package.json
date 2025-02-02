@@ -16,6 +16,7 @@
     "@zennolab_com/capmonstercloud-client": "^1.8.2",
     "axios": "^1.7.9",
     "chalk": "^5.4.1",
+    "dotenv": "^16.4.7",
     "ethers": "^6.13.5",
     "https-proxy-agent": "^7.0.6",
     "socks-proxy-agent": "^8.0.5"

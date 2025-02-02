@@ -1,4 +1,4 @@
-
+import 'dotenv/config'
 import axios from 'axios';
 import log from "./utils/logger.js"
 import iniBapakBudi from "./utils/banner.js"
@@ -42,7 +42,7 @@ async function claimTokens(address, proxy, type, apiKey, useCaptcha = false, ret
             return 'claimed'
         } else {
             log.error(`Error claiming Faucets, Retry Left ${retries}`, error.response?.statusText || error.message);
-            await delay(2)
+            await delay(3)
             if (retries > 0) return await claimTokens(address, proxy, type, apiKey, useCaptcha, retries - 1)
             else return null;
         }
@@ -73,7 +73,7 @@ async function createAccount(address, proxy, retries = 3) {
     const url = "https://beratrax-api-ae00332865bc.herokuapp.com/api/v1/account";
     const data = {
         address,
-        referrer: "GeognosticalBera"
+        referrer: "CrocoliteBera"
     };
 
     try {
@@ -171,13 +171,13 @@ async function main() {
     log.info(iniBapakBudi)
     await delay(3)
 
-    const type = await askQuestion("What Captcha Solver you want to use [1. 2Captcha, 2. AntiCaptcha, 3. CapMonster] input (1-3): ")
+    const type = "1"
     if (type !== '1' && type !== '2' && type !== '3') {
         log.error("Invalid captcha solver type, please enter number : 1-3 ");
         return;
     }
 
-    const apiKey = await askQuestion("Enter Your Apikey : ");
+    const apiKey = process.env.API_KEY;
     if (!apiKey) {
         log.error("Invalid api key");
         return;
@@ -210,7 +210,7 @@ async function main() {
 
                 const isClaimed = await claimTokens(address, proxy);
                 if (!isClaimed) continue;
-                else if (isClaimed === 401) await claimTokens(address, proxy, type, apiKey, true);
+                else if (isClaimed === 401 || isClaimed === 400) await claimTokens(address, proxy, type, apiKey, true);
                 log.info(`Processing Zap In and Stake for Wallet:`, address);
 
                 const zapAndStakeResult = await zapAndStake(privateKey, isClaimed)
@@ -220,6 +220,9 @@ async function main() {
                     if (!amount) continue;
                     else await updateHistoryTx(address, proxy, amount);
                 }
+
+                log.info(`Delay 5s before continue to next wallet.`);
+                await delay(5);
 
             } catch (error) {
                 log.error("Error creating account and staking:", error.message);
